@@ -7,7 +7,7 @@ public class TextExcelProgram {
 	public static String ProcessCommand(String userInput, Sheet sheet) {
 		if (userInput.contains("=")) {
 			String[] results = userInput.split(" = ");
-			sheet.setCell(results[0], results[1]);
+			sheet.setCell(results[0].toUpperCase(), results[1]);
 			return SETCELL_COMMAND;
 		} else {
 			switch (userInput.toLowerCase()) {

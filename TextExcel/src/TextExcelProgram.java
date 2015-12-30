@@ -1,8 +1,11 @@
 import java.util.Scanner;
 
-import persistence.Savable;
-
 public class TextExcelProgram {
+	private static final String FAREWELL = "Farewell!";
+	private static final String ENTER_A_COMMAND = "Enter a command: ";
+	private static final String WELCOME_TO_TEXT_EXCEL = "Welcome to TextExcel!";	
+	
+	public static final String UNDO_COMMAND = "undo";
 	public static final String SAVE_COMMAND = "save";
 	public static final String LOAD_COMMAND = "load";
 	public static final String CLEAR_COMMAND = "clear";
@@ -13,23 +16,47 @@ public class TextExcelProgram {
 	public static final String UNKNOWN_COMMAND = "unknown";
 	public static final String NOTHING_DONE_COMMAND = "";
 
-	public static String ProcessCommand(String userInput, Sheet sheet) {
+	public static void runApp() {
+		Sheet sheet = new Sheet();
+		Scanner input = new Scanner(System.in);
+		System.out.println(WELCOME_TO_TEXT_EXCEL);
+		while(true) {
+			System.out.println(ENTER_A_COMMAND);
+			String commandReturn = ProcessCommand(input, sheet);
+			if(commandReturn.equals(TextExcelProgram.EXIT_COMMAND)) {
+				System.out.println(FAREWELL);
+				break;
+			}
+		}
+		input.close();		
+	}
+	
+	public static String ProcessCommand(Scanner input, Sheet sheet) {
+		String userInput = input.nextLine();
+		if (userInput.toLowerCase().contains(UNDO_COMMAND)) {
+			sheet.popHistory();
+			return UNDO_COMMAND;
+		}
 		if (userInput.toLowerCase().contains(SAVE_COMMAND)) {
 			saveSheet(userInput, sheet);
 			return SAVE_COMMAND;
 		} else if (userInput.toLowerCase().contains(LOAD_COMMAND)) {
-			if (confirmAction()) {
+			int cellCount = sheet.getCellCount();
+			if (cellCount == 0 || cellCount > 0 && confirmAction(input)) {
+				sheet.pushHistory();
 				loadSheet(userInput, sheet);
 				return LOAD_COMMAND;
 			}
 			return NOTHING_DONE_COMMAND;
 		} else if (userInput.toLowerCase().contains(CLEAR_COMMAND)) {
-			if (confirmAction()) {
+			if (sheet.getCellCount() > 0 && confirmAction(input)) {
+				sheet.pushHistory();
 				sheet.clear(userInput);
 				return CLEAR_COMMAND;
 			}
 			return NOTHING_DONE_COMMAND;
 		} else if (userInput.contains("=")) {
+			sheet.pushHistory();
 			String[] results = userInput.split("=");
 			sheet.setCell(results[0].trim().toUpperCase(), results[1].trim());
 			return SETCELL_COMMAND;
@@ -52,11 +79,9 @@ public class TextExcelProgram {
 		}
 	}
 
-	private static boolean confirmAction() {
+	private static boolean confirmAction(Scanner input) {
 		System.out.println("Are you sure (yes/no)?");
-		Scanner input = new Scanner(System.in);
 		String answer = input.nextLine().toLowerCase();
-		input.close();
 		return (answer.equals("yes") || answer.equals("y"));
 	}
 
@@ -69,7 +94,6 @@ public class TextExcelProgram {
 		} catch (java.io.FileNotFoundException e) {
 			System.out.println("Sorry couldn't find file: " + fileName);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -83,7 +107,6 @@ public class TextExcelProgram {
 		} catch (java.io.FileNotFoundException e) {
 			System.out.println("Sorry couldn't save file: " + fileName);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

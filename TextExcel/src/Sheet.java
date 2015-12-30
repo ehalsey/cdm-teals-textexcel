@@ -3,10 +3,12 @@ import java.text.DateFormat;
 import persistence.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Sheet implements Savable {
 	private static final String DATA_DELIMETER = String.valueOf(((char)31));
@@ -21,8 +23,18 @@ public class Sheet implements Savable {
 	public static final int SHEET_MAX_CELLS = SHEET_MAX_ROWS * SHEET_MAX_COLUMNS;
 	
 	private Map<String, ICell> _cells = new HashMap<String,ICell>();
+	private ArrayList<Map<String, ICell>> _history = new ArrayList<Map<String, ICell>>(); 
 
 	Sheet() {
+	}
+	
+	public void pushHistory() {
+		HashMap<String,ICell> latest = new HashMap<>(_cells);
+		_history.add(latest);
+	}
+	
+	public void popHistory() {
+		_cells = _history.remove(_history.size()-1);
 	}
 	
 	public void setCell(String key, String value) {
@@ -55,8 +67,6 @@ public class Sheet implements Savable {
 	}
 
 	public void print() {
-		System.out.println("sheet.print");
-
 		//print out column header row
 		System.out.print(Utils.padLeft(COLUMN_SEP, Cell.MAX_LENGTH + 1));
 		for (int column = 2; column <= SHEET_MAX_COLUMNS+1; column++) {
@@ -125,10 +135,10 @@ public class Sheet implements Savable {
 	public String[] getSaveData() {
 		String[] ret = new String[_cells.size()];
 		try {
-			Iterator it = _cells.entrySet().iterator();
+			Iterator<Entry<String, ICell>> it = _cells.entrySet().iterator();
 			int index = 0;
 		    while (it.hasNext()) {
-		        Map.Entry pair = (Map.Entry)it.next();
+		        Map.Entry<String, ICell> pair = (Map.Entry<String, ICell>)it.next();
 		        Object cell = pair.getValue();
 		        String cellType = "";
 		        if(cell instanceof TextCell) {
@@ -169,7 +179,6 @@ public class Sheet implements Savable {
 				try {
 					_cells.put(data[0], new DateCell(data[2]));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;				
@@ -178,5 +187,9 @@ public class Sheet implements Savable {
 			}
 		}
 		
+	}
+
+	public int getCellCount() {
+		return _cells.size();
 	}
 }

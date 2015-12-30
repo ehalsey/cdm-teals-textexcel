@@ -39,7 +39,10 @@ public class Sheet implements Savable {
 	
 	public void setCell(String key, String value) {
 		ICell cell = null;
-		if(value.contains("\"")) {
+		if(value.contains("(")) {
+			cell = new FormulaCell(value);
+		}
+		else if(value.contains("\"")) {
 			cell = new TextCell(value);
 		}
 		else

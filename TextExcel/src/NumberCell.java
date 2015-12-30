@@ -10,6 +10,11 @@ public class NumberCell extends Cell implements ICell {
 	}
 
 	public String toString() {
+		return ""+_contents;
+	}
+
+	@Override
+	public String getValue() {
 		String contents = "" + _contents;
 		if (_contents == BLANK_VALUE) {
 			return Utils.getStringWithLengthAndFilledWithCharacter(

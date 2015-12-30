@@ -14,6 +14,11 @@ public class DateCell extends Cell implements ICell {
 	}
 
 	public String toString() {
+		return "" + SIMPLE_DATE_FORMAT.format(_contents);
+	}
+
+	@Override
+	public String getValue() {
 		String contents = "" + SIMPLE_DATE_FORMAT.format(_contents);
 		if (_contents == BLANK_VALUE) {
 			return Utils.getStringWithLengthAndFilledWithCharacter(

@@ -14,6 +14,11 @@ public class TextCell extends Cell implements ICell {
 	}
 
 	public String toString() {
+		return "\"" + _contents + "\"";
+	}
+
+	@Override
+	public String getValue() {
 		if (_contents.equals(BLANK_VALUE)) {
 			return Utils.getStringWithLengthAndFilledWithCharacter(
 					Cell.MAX_LENGTH, ' ');

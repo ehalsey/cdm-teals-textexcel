@@ -18,13 +18,6 @@ public class Sheet {
 	private Map<String, ICell> _cells = new HashMap<String,ICell>();
 
 	Sheet() {
-		//TODO try without initializing all of the cells
-		for (int row = 1; row <= SHEET_MAX_ROWS; row++) {
-			for (int column = 1; column <= SHEET_MAX_COLUMNS; column++) {
-				// initialize all cells to TextCells
-				_cells.put(getCellKey(row,column), new TextCell());
-			}
-		}
 	}
 	
 	public void setCell(String key, String value) {
@@ -81,8 +74,12 @@ public class Sheet {
 			//------------+------------+------------+------------+------------+------------+------------+------------+
 			System.out.print(Utils.center(""+row, Cell.MAX_LENGTH) + COLUMN_SEP);
 			for (int column = 1; column <= SHEET_MAX_COLUMNS; column++) {
-				ICell cell = (ICell) _cells.get(getCellKey(row, column));
-				System.out.print(Utils.center(cell.toString(), Cell.MAX_LENGTH) + COLUMN_SEP);
+				String cellKey = getCellKey(row, column);
+				String val = "";
+				if(_cells.containsKey(cellKey)){
+					val = ((ICell) _cells.get(cellKey)).getValue();
+				}
+				System.out.print(Utils.center(val, Cell.MAX_LENGTH) + COLUMN_SEP);
 			}
 			System.out.println();
 			printRowSeparator();
@@ -102,6 +99,10 @@ public class Sheet {
 		{
 			//TODO need to fix so values don't contain padding & enclose with quotes
 			System.out.println(cellKey + " = " + _cells.get(cellKey).toString());
+		}
+		else
+		{
+			System.out.println("<empty>");
 		}
 		
 	}

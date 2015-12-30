@@ -1,4 +1,8 @@
+import persistence.Savable;
+
 public class TextExcelProgram {
+	public static final String SAVE_COMMAND = "save";
+	public static final String LOAD_COMMAND = "load";
 	public static final String CLEAR_COMMAND = "clear";
 	public static final String PRINTCELL_COMMAND = "printcell";
 	public static final String SETCELL_COMMAND = "setcell";
@@ -7,7 +11,15 @@ public class TextExcelProgram {
 	public static final String UNKNOWN_COMMAND = "unknown";
 
 	public static String ProcessCommand(String userInput, Sheet sheet) {
-		if(userInput.toLowerCase().contains(CLEAR_COMMAND)) {
+		if(userInput.toLowerCase().contains(SAVE_COMMAND)) {
+			saveSheet(sheet);
+			return SAVE_COMMAND;
+		}	
+		else if(userInput.toLowerCase().contains(LOAD_COMMAND)) {
+			loadSheet(sheet);
+			return LOAD_COMMAND;
+		}		
+		else if(userInput.toLowerCase().contains(CLEAR_COMMAND)) {
 			sheet.clear(userInput);
 			return CLEAR_COMMAND;
 		}
@@ -31,6 +43,25 @@ public class TextExcelProgram {
 				return UNKNOWN_COMMAND;
 			}
 			}
+		}
+	}
+
+	private static void loadSheet(Sheet sheet) {
+		try {
+			persistence.PersistenceHelper.load("c:\\temp\\t.textexcel", sheet);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private static void saveSheet(Sheet sheet) {
+		try {
+			persistence.PersistenceHelper.save("c:\\temp\\t.textexcel", sheet);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

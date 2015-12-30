@@ -1,10 +1,15 @@
 import java.text.DateFormat;
+
+import persistence.*;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-public class Sheet {
+public class Sheet implements Savable {
+	private static final String DATA_DELIMETER = String.valueOf(((char)31));
 	/* 
 	 * implementation of a spreadsheet
 	 */
@@ -23,12 +28,6 @@ public class Sheet {
 	public void setCell(String key, String value) {
 		ICell cell = null;
 		if(value.contains("\"")) {
-			if(value.startsWith("\"")) {
-				value = value.substring(1);
-				if(value.endsWith("\"")) {
-					value = value.substring(0, value.length()-1);
-				}
-			}
 			cell = new TextCell(value);
 		}
 		else
@@ -118,6 +117,65 @@ public class Sheet {
 		else
 		{
 			_cells.clear();
+		}
+		
+	}
+
+	@Override
+	public String[] getSaveData() {
+		String[] ret = new String[_cells.size()];
+		try {
+			Iterator it = _cells.entrySet().iterator();
+			int index = 0;
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        Object cell = pair.getValue();
+		        String cellType = "";
+		        if(cell instanceof TextCell) {
+		        	cellType = "TextCell";
+		        }
+		        else if (cell instanceof NumberCell) {
+		        	cellType = "NumberCell";
+		        }
+		        else if (cell instanceof DateCell) {
+		        	cellType = "DateCell";
+		        }
+		        String data =pair.getKey() + DATA_DELIMETER + cellType + DATA_DELIMETER + cell.toString(); 
+		        ret[index] = data;
+		        it.remove(); // avoids a ConcurrentModificationException
+		        index++;
+		    }
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@Override
+	public void loadFrom(String[] saveData) {
+		//TODO should use Program clear confirm and save if want
+		_cells.clear();
+		for (int i = 0; i < saveData.length; i++) {
+			String[] data = saveData[i].split(DATA_DELIMETER);
+			switch (data[1]) {
+			case "TextCell":
+				_cells.put(data[0], new TextCell(data[2]));
+				break;
+			case "NumberCell":
+				_cells.put(data[0], new NumberCell(data[2]));
+				break;
+			case "DateCell":
+				try {
+					_cells.put(data[0], new DateCell(data[2]));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;				
+			default:
+				break;
+			}
 		}
 		
 	}

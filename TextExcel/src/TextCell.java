@@ -6,6 +6,12 @@ public class TextCell extends Cell implements ICell {
 	private String _contents = BLANK_VALUE;
 
 	public TextCell(String value) {
+		if(value.startsWith("\"")) {
+			value = value.substring(1);
+			if(value.endsWith("\"")) {
+				value = value.substring(0, value.length()-1);
+			}
+		}		
 		_contents = value;
 	}
 

@@ -5,10 +5,14 @@ public class NumberCell extends Cell implements ICell {
 	 */
 	private double _contents = BLANK_VALUE;
 
-	public NumberCell(Double valAsDouble) {
-		_contents = valAsDouble;
+	public NumberCell(Double value) {
+		_contents = value;
 	}
 
+	public NumberCell(String value) {
+		this(Double.parseDouble(value));
+	}
+	
 	public String toString() {
 		return ""+_contents;
 	}

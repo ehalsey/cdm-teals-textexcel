@@ -1,3 +1,5 @@
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,6 +13,10 @@ public class DateCell extends Cell implements ICell {
 
 	public DateCell(Date value) {
 		_contents = value;
+	}
+
+	public DateCell(String value) throws ParseException {
+		this(DateCell.SIMPLE_DATE_FORMAT.parse(value));
 	}
 
 	public String toString() {

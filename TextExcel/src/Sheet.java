@@ -106,4 +106,19 @@ public class Sheet {
 		}
 		
 	}
+
+	public void clear(String userInput) {
+		String[] options = userInput.split(" ");
+		if(options.length>1) {
+			String cellKey = options[1].toUpperCase();
+			if(_cells.containsKey(cellKey)) {
+				_cells.remove(cellKey);
+			}
+		}
+		else
+		{
+			_cells.clear();
+		}
+		
+	}
 }

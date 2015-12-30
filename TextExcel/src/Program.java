@@ -8,6 +8,7 @@ public class Program {
 	private static final String WELCOME_TO_TEXT_EXCEL = "Welcome to TextExcel!";
 
 	public static void main(String[] args) {
+		// see if this is working
 		runTextExcel();
 
 	}

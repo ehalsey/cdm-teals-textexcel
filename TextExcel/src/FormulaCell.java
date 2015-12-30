@@ -7,13 +7,17 @@ public class FormulaCell extends Cell implements ICell {
 	private String _contents = BLANK_VALUE;
 
 	FormulaCell(String value) {
+		_contents = stripParens(value);
+	}
+
+	private String stripParens(String value) {
 		if (value.startsWith("(")) {
 			value = value.substring(1);
 			if (value.endsWith(")")) {
 				value = value.substring(0, value.length() - 1);
 			}
 		}
-		_contents = value;
+		return value;
 	}
 
 	FormulaCell() {
@@ -71,5 +75,10 @@ public class FormulaCell extends Cell implements ICell {
 						Cell.MAX_LENGTH - 1) + ">";
 			}
 		}
+	}
+
+	@Override
+	public void setValue(String value) {
+		_contents = stripParens(value);
 	}
 }

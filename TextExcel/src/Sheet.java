@@ -1,10 +1,8 @@
-import java.text.DateFormat;
-
 import persistence.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,10 +22,14 @@ public class Sheet implements Savable {
 	
 	private Map<String, ICell> _cells = new HashMap<String,ICell>();
 	private ArrayList<Map<String, ICell>> _history = new ArrayList<Map<String, ICell>>(); 
+	
+	private static final ArrayList<ICellValue> _cellValueTypes = new ArrayList<ICellValue>(Arrays.asList(new FormulaCellValue(),new TextCellValue(),
+			new NumberCellValue(), new DateCellValue()));
 
 	Sheet() {
 	}
-	
+
+
 	public void pushHistory() {
 		HashMap<String,ICell> latest = new HashMap<>(_cells);
 		_history.add(latest);
@@ -39,27 +41,15 @@ public class Sheet implements Savable {
 	
 	public void setCell(String key, String value) {
 		ICell cell = null;
-		if(value.contains("(")) {
-			cell = new FormulaCell(value);
-		}
-		else if(value.contains("\"")) {
-			cell = new TextCell(value);
-		}
-		else
-		{
-			try {
-				Double valAsDouble = Double.parseDouble(value);
-				cell = new NumberCell(valAsDouble);
-			}
-			catch (NumberFormatException e) {}
-			finally {}
-		}
-		if(value.contains("/")) {
-			DateFormat formatter = DateCell.SIMPLE_DATE_FORMAT;
-			try {
-				Date valueAsDate = formatter.parse(value);
-				cell = new DateCell(valueAsDate);
-			} catch (ParseException e) {
+		for (ICellValue cellvalueType : _cellValueTypes) {
+			if(cellvalueType.isMatch(value)) {
+				try {
+					cell = (ICell) Class.forName(cellvalueType.getCellTypeName()).newInstance();
+					cell.setValue(value);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			}
 		}
 		_cells.put(key, cell);

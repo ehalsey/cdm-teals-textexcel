@@ -6,13 +6,17 @@ public class TextCell extends Cell implements ICell {
 	private String _contents = BLANK_VALUE;
 
 	public TextCell(String value) {
+		_contents = stripQuotes(value);
+	}
+
+	private String stripQuotes(String value) {
 		if(value.startsWith("\"")) {
 			value = value.substring(1);
 			if(value.endsWith("\"")) {
 				value = value.substring(0, value.length()-1);
 			}
-		}		
-		_contents = value;
+		}
+		return value;
 	}
 
 	public TextCell() {
@@ -33,5 +37,10 @@ public class TextCell extends Cell implements ICell {
 		} else {
 			return _contents.substring(0, Cell.MAX_LENGTH - 1) + ">";
 		}
+	}
+
+	@Override
+	public void setValue(String value) {
+		_contents=stripQuotes(value);
 	}
 }

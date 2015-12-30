@@ -9,6 +9,9 @@ public class DateCell extends Cell implements ICell {
 	 * Implementation for a cell containing a Number
 	 */
 	private Date _contents = BLANK_VALUE;
+	
+	public DateCell() {
+	}
 
 	public DateCell(Date value) {
 		_contents = value;
@@ -32,6 +35,15 @@ public class DateCell extends Cell implements ICell {
 			return Utils.center(contents, Cell.MAX_LENGTH);
 		} else {
 			return contents.substring(0, Cell.MAX_LENGTH - 1) + ">";
+		}
+	}
+
+	@Override
+	public void setValue(String value) {
+		try {
+			_contents = DateCell.SIMPLE_DATE_FORMAT.parse(value);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 	}
 }

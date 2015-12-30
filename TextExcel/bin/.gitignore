@@ -10,3 +10,9 @@
 /PrintCommand.class
 /PrintCellCommand.class
 /FormulaCell.class
+/ICellValue.class
+/CellValue.class
+/TextCellValue.class
+/FormulaCellValue.class
+/NumberCellValue.class
+/DateCellValue.class

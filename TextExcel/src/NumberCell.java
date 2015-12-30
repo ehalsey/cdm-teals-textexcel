@@ -4,6 +4,9 @@ public class NumberCell extends Cell implements ICell {
 	 * Implementation for a cell containing a Number
 	 */
 	private double _contents = BLANK_VALUE;
+	
+	public NumberCell() {
+	}
 
 	public NumberCell(Double value) {
 		_contents = value;
@@ -28,5 +31,10 @@ public class NumberCell extends Cell implements ICell {
 		} else {
 			return contents.substring(0, Cell.MAX_LENGTH - 1) + ">";
 		}
+	}
+
+	@Override
+	public void setValue(String value) {
+		_contents = Double.parseDouble(value);
 	}
 }

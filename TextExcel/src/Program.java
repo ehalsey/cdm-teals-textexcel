@@ -14,17 +14,16 @@ public class Program {
 
 	}
 
-	private static void testSplit() {
-		String val = "B3 = \"TEST\"";
-		String[] results = val.split(" = ");
-		for (int i = 0; i < results.length; i++) {
-			System.out.println(results[i]);
-		}
-	}
+//	private static void testSplit() {
+//		String val = "B3 = \"TEST\"";
+//		String[] results = val.split(" = ");
+//		for (int i = 0; i < results.length; i++) {
+//			System.out.println(results[i]);
+//		}
+//	}
 
 	private static void runTextExcel() {
 		Sheet sheet = new Sheet();
-		TextExcelProgram te = new TextExcelProgram();
 		Scanner input = new Scanner(System.in);
 		System.out.println(WELCOME_TO_TEXT_EXCEL);
 		while(true) {

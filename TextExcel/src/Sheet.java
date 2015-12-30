@@ -66,4 +66,25 @@ public class Sheet {
 		}
 		System.out.println();
 	}
+
+	public void setCell(String cell, String value) {
+		SheetCell sc = getSheetCell(cell);
+		if(sc == null) {
+			return;
+		}
+		sc.setValue(value);
+	}
+
+	private SheetCell getSheetCell(String cell) {
+		int rowChoice;
+		int colChoice;
+		colChoice = (char)cell.substring(0, 1).toCharArray()[0] - 64;
+		rowChoice = Integer.parseInt(cell.substring(1, 2));
+		for (SheetCell sc : _sheetCells) {
+			if(sc.getRow() == rowChoice && sc.getColumn() == colChoice) {
+				return sc;
+			}
+		}
+		return null;
+	}
 }

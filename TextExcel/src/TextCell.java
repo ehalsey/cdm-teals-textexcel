@@ -15,4 +15,9 @@ public class TextCell extends Cell implements ICell {
 			return _contents.substring(0, this.MAX_LENGTH - 1) + ">";
 		}
 	}
+
+	@Override
+	public void setValue(String newValue) {
+		_contents = newValue;
+	}
 }

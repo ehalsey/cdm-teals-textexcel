@@ -21,4 +21,8 @@ public class SheetCell {
 	public String getText() {
 		return _cell.getText();
 	}
+	
+	public void setValue(String newValue) {
+		_cell.setValue(newValue);
+	}
 }

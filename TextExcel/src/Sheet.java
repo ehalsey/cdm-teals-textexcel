@@ -142,7 +142,7 @@ public class Sheet implements Savable {
 		        }
 		        String data =pair.getKey() + DATA_DELIMETER + cellType + DATA_DELIMETER + cell.toString(); 
 		        ret[index] = data;
-		        it.remove(); // avoids a ConcurrentModificationException
+		        //it.remove(); // avoids a ConcurrentModificationException
 		        index++;
 		    }
 		} catch (Exception e) {

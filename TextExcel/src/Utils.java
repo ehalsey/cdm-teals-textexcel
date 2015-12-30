@@ -1,7 +1,14 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class Utils {
+	public static boolean confirmAction(Scanner input) {
+		System.out.println("Are you sure (yes/no)?");
+		String answer = input.nextLine().toLowerCase();
+		return (answer.equals("yes") || answer.equals("y"));
+	}	
+	
 	public static String padRight(String s, int n) {
 	     return String.format("%1$-" + n + "s", s);  
 	}

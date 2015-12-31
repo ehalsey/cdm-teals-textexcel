@@ -4,6 +4,14 @@ import java.util.Scanner;
 
 
 public class Utils {
+
+	public static String stripZeroDecimal(String contents) {
+		if(contents.endsWith(".0")) {
+			contents = contents.replace(".0", "");
+		}
+		return contents;
+	}
+	
 	public static boolean confirmAction(Scanner input) {
 		System.out.println("Are you sure (yes/no)?");
 		String answer = input.nextLine().toLowerCase();

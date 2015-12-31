@@ -9,7 +9,7 @@ public class FormulaCellValue implements ICellValue {
 
 	@Override
 	public String getCellTypeName() {
-		return "FormulaCell";
+		return ICellValue.nameSpace + "FormulaCell";
 	}
 
 }

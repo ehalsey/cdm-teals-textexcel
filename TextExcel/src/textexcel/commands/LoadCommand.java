@@ -15,7 +15,6 @@ public class LoadCommand extends SheetCommand {
 	public String executeCommand(Sheet sheet, Scanner input, String userCommand) {
 		int cellCount = sheet.getCellCount();
 		if (cellCount == 0 || cellCount > 0 && Utils.confirmAction(input)) {
-			sheet.pushHistory();
 			loadSheet(userCommand, sheet);
 			return this.commandString;
 		}

@@ -23,7 +23,7 @@ public class DateCellValue implements ICellValue {
 	@Override
 	public String getCellTypeName() {
 		// TODO Auto-generated method stub
-		return "DateCell";
+		return ICellValue.nameSpace + "DateCell";
 	}
 
 }

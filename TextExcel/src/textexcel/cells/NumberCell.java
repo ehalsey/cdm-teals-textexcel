@@ -21,12 +21,13 @@ public class NumberCell extends Cell implements ICell {
 	}
 	
 	public String toString() {
-		return ""+_contents;
+		return Utils.stripZeroDecimal(""+_contents);
 	}
 
 	@Override
 	public String getValue() {
 		String contents = "" + _contents;
+		contents = Utils.stripZeroDecimal(contents);
 		if (_contents == BLANK_VALUE) {
 			return Utils.getStringWithLengthAndFilledWithCharacter(
 					Cell.MAX_LENGTH, ' ');

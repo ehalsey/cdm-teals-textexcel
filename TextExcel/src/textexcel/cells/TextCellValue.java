@@ -1,7 +1,7 @@
 package textexcel.cells;
 
 public class TextCellValue implements ICellValue {
-
+	
 	@Override
 	public boolean isMatch(String value) {
 		return value.contains("\"");
@@ -9,6 +9,6 @@ public class TextCellValue implements ICellValue {
 
 	@Override
 	public String getCellTypeName() {
-		return "TextCell";
+		return ICellValue.nameSpace + "TextCell";
 	}	
 }

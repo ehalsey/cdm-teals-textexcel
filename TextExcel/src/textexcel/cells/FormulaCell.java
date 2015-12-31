@@ -9,7 +9,7 @@ public class FormulaCell extends Cell implements ICell {
 	private static final String BLANK_VALUE = "<empty>";
 	private String _contents = BLANK_VALUE;
 
-	FormulaCell(String value) {
+	public FormulaCell(String value) {
 		_contents = stripParens(value);
 	}
 
@@ -23,7 +23,7 @@ public class FormulaCell extends Cell implements ICell {
 		return value;
 	}
 
-	FormulaCell() {
+	public FormulaCell() {
 		this(BLANK_VALUE);
 	}
 
@@ -70,7 +70,7 @@ public class FormulaCell extends Cell implements ICell {
 			return Utils.getStringWithLengthAndFilledWithCharacter(
 					Cell.MAX_LENGTH, ' ');
 		} else {
-			final String valueAsString = "" + getCalculatedValue();
+			final String valueAsString = Utils.stripZeroDecimal("" + getCalculatedValue());
 			if (valueAsString.length() <= Cell.MAX_LENGTH) {
 				return Utils.center(valueAsString, Cell.MAX_LENGTH);
 			} else {

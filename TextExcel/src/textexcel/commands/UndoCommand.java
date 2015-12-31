@@ -13,7 +13,7 @@ public class UndoCommand extends SheetCommand {
 	
 	@Override
 	public String executeCommand(Sheet sheet, Scanner input, String command) {
-		sheet.popHistory();
+		sheet.undo();
 		return this.commandString;
 	}
 

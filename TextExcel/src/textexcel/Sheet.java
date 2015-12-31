@@ -1,15 +1,6 @@
 package textexcel;
 import persistence.*;
-import textexcel.cells.Cell;
-import textexcel.cells.DateCell;
-import textexcel.cells.DateCellValue;
-import textexcel.cells.FormulaCellValue;
-import textexcel.cells.ICell;
-import textexcel.cells.ICellValue;
-import textexcel.cells.NumberCell;
-import textexcel.cells.NumberCellValue;
-import textexcel.cells.TextCell;
-import textexcel.cells.TextCellValue;
+import textexcel.cells.*;
 import utils.Utils;
 
 import java.text.ParseException;
@@ -28,9 +19,9 @@ public class Sheet implements Savable {
 	private static final char ROW_COL_SEP_CHAR = '+';
 	private static final char ROW_SEP_CHAR = '-';
 	private static final String COLUMN_SEP = "|";
-	public static final int SHEET_MAX_COLUMNS = 7;
-	public static final int SHEET_MAX_ROWS = 10;
-	public static final int SHEET_MAX_CELLS = SHEET_MAX_ROWS * SHEET_MAX_COLUMNS;
+
+	private int _maxColumns;
+	private int _maxRows;
 	
 	private Map<String, ICell> _cells = new HashMap<String,ICell>();
 	private ArrayList<Map<String, ICell>> _history = new ArrayList<Map<String, ICell>>(); 
@@ -38,17 +29,21 @@ public class Sheet implements Savable {
 	private static final ArrayList<ICellValue> _cellValueTypes = new ArrayList<ICellValue>(Arrays.asList(new FormulaCellValue(),new TextCellValue(),
 			new NumberCellValue(), new DateCellValue()));
 
-	Sheet() {
+	public Sheet(int maxRows, int maxColumns) {
+		_maxRows = maxRows;
+		_maxColumns = maxColumns;
 	}
 
-
-	public void pushHistory() {
-		HashMap<String,ICell> latest = new HashMap<>(_cells);
-		_history.add(latest);
+	private void pushHistory() {
+		_history.add(new HashMap<>(_cells));
 	}
 	
-	public void popHistory() {
+	private void popHistory() {
 		_cells = _history.remove(_history.size()-1);
+	}
+	
+	public ICell getCell(String key) {
+		return _cells.get(key);
 	}
 	
 	public void setCell(String key, String value) {
@@ -57,62 +52,67 @@ public class Sheet implements Savable {
 			if(cellvalueType.isMatch(value)) {
 				try {
 					cell = (ICell) Class.forName(cellvalueType.getCellTypeName()).newInstance();
+					pushHistory();
 					cell.setValue(value);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
 			}
 		}
+		pushHistory();
 		_cells.put(key, cell);
 	}
 
 	private String getCellKey(int row, int column) {
 		return (char)(64 + column) + "" + row;
 	}
-
-	public void print() {
-		//print out column header row
-		System.out.print(Utils.padLeft(COLUMN_SEP, Cell.MAX_LENGTH + 1));
-		for (int column = 2; column <= SHEET_MAX_COLUMNS+1; column++) {
+	
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		//add column header row
+		buffer.append(Utils.padLeft(COLUMN_SEP, Cell.MAX_LENGTH + 1));
+		for (int column = 2; column <= _maxColumns+1; column++) {
 			//A = 65
 			//char colLetter = (char)(column + 63);
-			System.out.print(Utils.center(String.valueOf((char)(column + 63)), Cell.MAX_LENGTH) + COLUMN_SEP);
+			buffer.append(Utils.center(String.valueOf((char)(column + 63)), Cell.MAX_LENGTH) + COLUMN_SEP);
 		}
-		System.out.println();
-		printRowSeparator();
+		buffer.append("\r\n");
+		buffer.append(getRowSeparator());
 		
-		//print out each row
-		for (int row = 1; row <= SHEET_MAX_ROWS; row++) {
-			//print row separator
+		//add each row
+		for (int row = 1; row <= _maxRows; row++) {
+			//get row separator
 			//------------+------------+------------+------------+------------+------------+------------+------------+
-			System.out.print(Utils.center(""+row, Cell.MAX_LENGTH) + COLUMN_SEP);
-			for (int column = 1; column <= SHEET_MAX_COLUMNS; column++) {
+			buffer.append(Utils.center(""+row, Cell.MAX_LENGTH) + COLUMN_SEP);
+			for (int column = 1; column <= _maxColumns; column++) {
 				String cellKey = getCellKey(row, column);
 				String val = "";
 				if(_cells.containsKey(cellKey)){
 					val = ((ICell) _cells.get(cellKey)).getValue();
 				}
-				System.out.print(Utils.center(val, Cell.MAX_LENGTH) + COLUMN_SEP);
+				buffer.append(Utils.center(val, Cell.MAX_LENGTH) + COLUMN_SEP);
 			}
-			System.out.println();
-			printRowSeparator();
+			buffer.append("\r\n");
+			buffer.append(getRowSeparator());
 		}
+		return buffer.toString();
 	}
 
-	private void printRowSeparator() {
+	private String getRowSeparator() {
+		StringBuffer buffer = new StringBuffer();
 		String columnSep = Utils.getStringWithLengthAndFilledWithCharacter(Cell.MAX_LENGTH,ROW_SEP_CHAR) + ROW_COL_SEP_CHAR;
-		for (int column = 0; column <= SHEET_MAX_COLUMNS; column++) {
-			System.out.print(columnSep);
+		for (int column = 0; column <= _maxColumns; column++) {
+			buffer.append(columnSep);
 		}
-		System.out.println();
+		buffer.append("\r\n");
+		return buffer.toString();
 	}
 
-	public void printCell(String cellKey) {
-		if(_cells.containsKey(cellKey)) 
+	public void printCell(String key) {
+		if(_cells.containsKey(key)) 
 		{
 			//TODO need to fix so values don't contain padding & enclose with quotes
-			System.out.println(cellKey + " = " + _cells.get(cellKey).toString());
+			System.out.println(key + " = " + _cells.get(key).toString());
 		}
 		else
 		{
@@ -122,6 +122,7 @@ public class Sheet implements Savable {
 	}
 
 	public void clear(String userInput) {
+		pushHistory();
 		String[] options = userInput.split(" ");
 		if(options.length>1) {
 			String cellKey = options[1].toUpperCase();
@@ -155,6 +156,9 @@ public class Sheet implements Savable {
 		        else if (cell instanceof DateCell) {
 		        	cellType = "DateCell";
 		        }
+		        else if (cell instanceof FormulaCell) {
+		        	cellType = "FormulaCell";
+		        }
 		        String data =pair.getKey() + DATA_DELIMETER + cellType + DATA_DELIMETER + cell.toString(); 
 		        ret[index] = data;
 		        //it.remove(); // avoids a ConcurrentModificationException
@@ -170,10 +174,14 @@ public class Sheet implements Savable {
 	@Override
 	public void loadFrom(String[] saveData) {
 		//TODO should use Program clear confirm and save if want
+		pushHistory();
 		_cells.clear();
 		for (int i = 0; i < saveData.length; i++) {
 			String[] data = saveData[i].split(DATA_DELIMETER);
 			switch (data[1]) {
+			case "FormulaCell":
+				_cells.put(data[0], new FormulaCell(data[2]));
+				break;
 			case "TextCell":
 				_cells.put(data[0], new TextCell(data[2]));
 				break;
@@ -196,5 +204,9 @@ public class Sheet implements Savable {
 
 	public int getCellCount() {
 		return _cells.size();
+	}
+
+	public void undo() {
+		popHistory();
 	}
 }

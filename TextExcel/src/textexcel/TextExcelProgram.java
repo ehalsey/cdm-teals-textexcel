@@ -31,7 +31,7 @@ public class TextExcelProgram {
 	public static final Map<String, ISheetCommand> _commands = getSheetCommands();
 
 	public static void runApp() {
-		Sheet sheet = new Sheet();
+		Sheet sheet = new Sheet(10,7);
 		Scanner input = new Scanner(System.in);
 		System.out.println(WELCOME_TO_TEXT_EXCEL);
 		while (true) {

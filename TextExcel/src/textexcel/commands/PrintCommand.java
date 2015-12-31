@@ -12,7 +12,7 @@ public class PrintCommand extends SheetCommand {
 	}
 	@Override
 	public String executeCommand(Sheet sheet, Scanner input, String userCommand) {
-		sheet.print();
+		System.out.println(sheet.toString());
 		return this.commandString;
 	}
 

@@ -1,8 +1,13 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
+import utils.Utils;
 
 
 public class ClearCommand extends SheetCommand {
-	ClearCommand() {
+	public ClearCommand() {
 		this.commandString = TextExcelProgram.CLEAR_COMMAND;
 	}
 

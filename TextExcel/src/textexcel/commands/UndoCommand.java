@@ -1,9 +1,13 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
 
 
 public class UndoCommand extends SheetCommand {
 
-	UndoCommand() {
+	public UndoCommand() {
 		this.commandString = TextExcelProgram.UNDO_COMMAND;
 	}
 	

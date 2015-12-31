@@ -1,6 +1,9 @@
+package textexcel.cells;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import utils.Utils;
 
 public class DateCell extends Cell implements ICell {
 	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");

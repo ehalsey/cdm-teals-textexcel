@@ -1,3 +1,4 @@
+package textexcel.cells;
 
 public abstract class Cell {
 	public static final int MAX_LENGTH = 12;

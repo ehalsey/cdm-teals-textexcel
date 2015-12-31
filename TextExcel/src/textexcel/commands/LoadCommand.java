@@ -1,8 +1,13 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
+import utils.Utils;
 
 
 public class LoadCommand extends SheetCommand {
-	LoadCommand() {
+	public LoadCommand() {
 		this.commandString = TextExcelProgram.LOAD_COMMAND;
 	}
 

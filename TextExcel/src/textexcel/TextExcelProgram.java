@@ -1,6 +1,17 @@
+package textexcel;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import textexcel.commands.ClearCommand;
+import textexcel.commands.ExitCommand;
+import textexcel.commands.ISheetCommand;
+import textexcel.commands.LoadCommand;
+import textexcel.commands.PrintCellCommand;
+import textexcel.commands.PrintCommand;
+import textexcel.commands.SaveCommand;
+import textexcel.commands.SetCellCommand;
+import textexcel.commands.UndoCommand;
 
 public class TextExcelProgram {
 	private static final String FAREWELL = "Farewell!";

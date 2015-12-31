@@ -1,6 +1,9 @@
+package textexcel.cells;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import utils.Utils;
 
 public class FormulaCell extends Cell implements ICell {
 	private static final String BLANK_VALUE = "<empty>";

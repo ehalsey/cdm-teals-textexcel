@@ -1,3 +1,7 @@
+package textexcel.cells;
+
+import utils.Utils;
+
 public class TextCell extends Cell implements ICell {
 	private static final String BLANK_VALUE = "<empty>";
 	/**

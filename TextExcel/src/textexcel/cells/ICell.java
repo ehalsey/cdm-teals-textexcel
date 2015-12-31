@@ -1,3 +1,4 @@
+package textexcel.cells;
 
 public interface ICell {
 	public void setValue(String value);

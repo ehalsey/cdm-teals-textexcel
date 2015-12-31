@@ -1,3 +1,4 @@
+package textexcel.cells;
 
 public class NumberCellValue implements ICellValue {
 

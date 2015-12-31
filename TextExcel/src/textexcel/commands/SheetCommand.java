@@ -1,3 +1,4 @@
+package textexcel.commands;
 public abstract class SheetCommand implements ISheetCommand {
 
 	public String commandString = "";

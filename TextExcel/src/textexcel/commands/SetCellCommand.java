@@ -1,8 +1,12 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
 
 
 public class SetCellCommand extends SheetCommand {
-	SetCellCommand() {
+	public SetCellCommand() {
 		this.commandString = TextExcelProgram.SETCELL_COMMAND;
 	}
 	

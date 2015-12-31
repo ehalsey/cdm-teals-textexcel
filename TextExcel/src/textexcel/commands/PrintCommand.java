@@ -1,9 +1,13 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
 
 
 public class PrintCommand extends SheetCommand {
 
-	PrintCommand() {
+	public PrintCommand() {
 		this.commandString = TextExcelProgram.PRINT_COMMAND;
 	}
 	@Override

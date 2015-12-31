@@ -1,8 +1,12 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
 
 
 public class SaveCommand extends SheetCommand {
-	SaveCommand() {
+	public SaveCommand() {
 		this.commandString = TextExcelProgram.SAVE_COMMAND;
 	}
 

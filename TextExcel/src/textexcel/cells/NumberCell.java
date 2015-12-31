@@ -1,3 +1,7 @@
+package textexcel.cells;
+
+import utils.Utils;
+
 public class NumberCell extends Cell implements ICell {
 	private static final double BLANK_VALUE = (double) 0;
 	/**

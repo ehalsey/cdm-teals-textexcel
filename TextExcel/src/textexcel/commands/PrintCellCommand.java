@@ -1,9 +1,13 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
 
 
 public class PrintCellCommand extends SheetCommand {
 	
-	PrintCellCommand() {
+	public PrintCellCommand() {
 		this.commandString = TextExcelProgram.PRINTCELL_COMMAND;
 	}
 	

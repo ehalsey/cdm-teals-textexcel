@@ -1,9 +1,13 @@
+package textexcel.commands;
 import java.util.Scanner;
+
+import textexcel.Sheet;
+import textexcel.TextExcelProgram;
 
 
 public class ExitCommand extends SheetCommand {
 
-	ExitCommand() {
+	public ExitCommand() {
 		this.commandString = TextExcelProgram.EXIT_COMMAND;
 	}
 	

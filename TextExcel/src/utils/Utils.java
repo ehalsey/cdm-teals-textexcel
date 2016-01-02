@@ -5,8 +5,15 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import textexcel.Sheet;
+import textexcel.cells.FormulaCell;
+import textexcel.cells.ICell;
+
 
 public class Utils {
+	public static ArrayList<String> getCellKeyParts(String cellKey) {
+		return utils.Utils.breakString("(([A-Za-z]+)|(\\d+))",cellKey);
+	}	
 	
 	public static ArrayList<String> breakString(String regex, String value) {
 		ArrayList<String> parts = new ArrayList<>();
@@ -41,6 +48,29 @@ public class Utils {
 		}
 		return contents;
 	}
+	
+	public static ArrayList<ICell> getCellsForFunction(String contents, Sheet sheet) {
+		String[] parts = contents.split(" ");
+		String beginCell = parts[1];
+		String endCell = parts[3];
+		
+		ArrayList<String> cellKeyParts;		
+		cellKeyParts = getCellKeyParts(beginCell);		
+		char startColumn = cellKeyParts.get(0).toCharArray()[0];
+		int startRow = Integer.parseInt(cellKeyParts.get(1));
+		
+		cellKeyParts = getCellKeyParts(endCell);		
+		char endColumn = cellKeyParts.get(0).toCharArray()[0];
+		int endRow = Integer.parseInt(cellKeyParts.get(1));
+		
+		ArrayList<ICell> cells = new ArrayList<ICell>();
+		for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
+			for (char colChar = startColumn; colChar <= endColumn; colChar++) {
+				cells.add(sheet.getCell(String.valueOf(colChar)+rowIndex));
+			}
+		}
+		return cells;
+	}	
 	
 	public static boolean confirmAction(Scanner input) {
 		System.out.println("Are you sure (yes/no)?");

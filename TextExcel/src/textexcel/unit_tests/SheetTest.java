@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import textexcel.Sheet;
 import textexcel.cells.ICell;
+import textexcel.commands.SortAscendingCommand;
 
 public class SheetTest {
 
@@ -188,6 +189,24 @@ public class SheetTest {
 		assertEquals("3.5",sheet.getCell("B5").getValue().trim());
 		sheet.setCell("C5", "( sum A1 - C1 )");
 		assertEquals("6",sheet.getCell("C5").getValue().trim());
+	}
+	
+	@Test
+	public void testSortAscending() {
+		Sheet sheet = new Sheet(10, 7);
+		sheet.setCell("B3", "100");
+		sheet.setCell("C3", "2");
+		sheet.setCell("D3", "10");
+		sheet.setCell("E3", "200");
+		sheet.setCell("F3", "2");
+		sheet.setCell("D6", "5");
+		sheet.setCell("D7", "60");
+		sheet.setCell("D8", "500");
+		sheet.setCell("D9", "6");
+		sheet.setCell("D10", "5");	
+		//Enter a command: sorta B3 - F3
+		SortAscendingCommand command = new SortAscendingCommand();
+		command.executeCommand(sheet, null, "sorta B3 - F3");
 	}
 
 }

@@ -2,9 +2,6 @@ package textexcel.cells;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.hamcrest.core.IsInstanceOf;
-
 import textexcel.Sheet;
 import utils.Utils;
 
@@ -29,12 +26,10 @@ public class FormulaCell extends Cell implements ICell {
 	private double getCalculatedValue() {
 		ArrayList<String> parts = new ArrayList<String>();
 		if(_contents.matches("sum [A-Za-z]\\d+ \\- [A-Za-z]\\d+")) {
-			ArrayList<ICell> cells = getCellsForFunction();
-			return calculateSum(cells);
+			return calculateSum(Utils.getCellsForFunction(_contents,this.getSheet()));
 		}
 		if(_contents.matches("avg [A-Za-z]\\d+ \\- [A-Za-z]\\d+")) {
-			ArrayList<ICell> cells = getCellsForFunction();
-			return calculateAvg(cells);
+			return calculateAvg(Utils.getCellsForFunction(_contents,this.getSheet()));
 		}
 
 		Pattern pattern = Pattern
@@ -82,10 +77,6 @@ public class FormulaCell extends Cell implements ICell {
 		return total;
 	}
 
-	private static ArrayList<String> GetCellKeyParts(String cellKey) {
-		return utils.Utils.breakString("(([A-Za-z]+)|(\\d+))",cellKey);
-	}
-
 	private double calculateSum(ArrayList<ICell> cells) {
 		double total = 0.0;
 		for (ICell cell : cells) {
@@ -103,30 +94,6 @@ public class FormulaCell extends Cell implements ICell {
 		return calculateSum(cells)/cells.size();
 	}
 	
-	private ArrayList<ICell> getCellsForFunction() {
-		String[] parts = _contents.split(" ");
-		String beginCell = parts[1];
-		String endCell = parts[3];
-		
-		ArrayList<String> cellKeyParts;		
-		cellKeyParts = FormulaCell.GetCellKeyParts(beginCell);		
-		char startColumn = cellKeyParts.get(0).toCharArray()[0];
-		int startRow = Integer.parseInt(cellKeyParts.get(1));
-		
-		cellKeyParts = FormulaCell.GetCellKeyParts(endCell);		
-		char endColumn = cellKeyParts.get(0).toCharArray()[0];
-		int endRow = Integer.parseInt(cellKeyParts.get(1));
-		
-		ArrayList<ICell> cells = new ArrayList<ICell>();
-		Sheet sheet = this.getSheet();
-		for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
-			for (char colChar = startColumn; colChar <= endColumn; colChar++) {
-				cells.add(sheet.getCell(String.valueOf(colChar)+rowIndex));
-			}
-		}
-		return cells;
-	}
-
 	@Override
 	public String getValue() {
 		if (_contents.equals(BLANK_VALUE)) {

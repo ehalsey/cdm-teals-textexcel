@@ -11,6 +11,7 @@ import textexcel.commands.PrintCellCommand;
 import textexcel.commands.PrintCommand;
 import textexcel.commands.SaveCommand;
 import textexcel.commands.SetCellCommand;
+import textexcel.commands.SortAscendingCommand;
 import textexcel.commands.UndoCommand;
 
 public class TextExcelProgram {
@@ -28,6 +29,8 @@ public class TextExcelProgram {
 	public static final String EXIT_COMMAND = "exit";
 	public static final String UNKNOWN_COMMAND = "unknown";
 	public static final String NOTHING_DONE_COMMAND = "";
+	public static final String SORTASCENDING_COMMAND = "sorta";
+	public static final String SORTDESCENDING_COMMAND = "sortd";
 	public static final Map<String, ISheetCommand> _commands = getSheetCommands();
 
 	public static void runApp() {
@@ -55,6 +58,7 @@ public class TextExcelProgram {
 		commands.put(EXIT_COMMAND,new ExitCommand());
 		commands.put(PRINT_COMMAND,new PrintCommand());
 		commands.put(PRINTCELL_COMMAND,new PrintCellCommand());
+		commands.put(SORTASCENDING_COMMAND,new SortAscendingCommand());
 		return commands;
 	}
 

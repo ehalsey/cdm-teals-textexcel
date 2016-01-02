@@ -1,5 +1,6 @@
 package textexcel.cells;
 
+import textexcel.Sheet;
 import utils.Utils;
 
 public class TextCell extends Cell implements ICell {
@@ -9,22 +10,13 @@ public class TextCell extends Cell implements ICell {
 	 */
 	private String _contents = BLANK_VALUE;
 
-	public TextCell(String value) {
-		_contents = stripQuotes(value);
+	public TextCell(Sheet sheet, String value) {
+		super(sheet);
+		_contents = utils.Utils.stripOuter(value, "\"");
 	}
 
-	private String stripQuotes(String value) {
-		if(value.startsWith("\"")) {
-			value = value.substring(1);
-			if(value.endsWith("\"")) {
-				value = value.substring(0, value.length()-1);
-			}
-		}
-		return value;
-	}
-
-	public TextCell() {
-		this(BLANK_VALUE);
+	public TextCell(Sheet sheet) {
+		this(sheet, BLANK_VALUE);
 	}
 
 	public String toString() {
@@ -45,6 +37,6 @@ public class TextCell extends Cell implements ICell {
 
 	@Override
 	public void setValue(String value) {
-		_contents=stripQuotes(value);
+		_contents=utils.Utils.stripOuter(value, "\"");
 	}
 }

@@ -3,6 +3,7 @@ import persistence.*;
 import textexcel.cells.*;
 import utils.Utils;
 
+import java.lang.reflect.Constructor;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +52,8 @@ public class Sheet implements Savable {
 		for (ICellValue cellvalueType : _cellValueTypes) {
 			if(cellvalueType.isMatch(value)) {
 				try {
-					cell = (ICell) Class.forName(cellvalueType.getCellTypeName()).newInstance();
+					Constructor c = Class.forName(cellvalueType.getCellTypeName()).getConstructor(Sheet.class);
+					cell = (ICell) c.newInstance(this);
 					pushHistory();
 					cell.setValue(value);
 				} catch (Exception e) {
@@ -180,17 +182,17 @@ public class Sheet implements Savable {
 			String[] data = saveData[i].split(DATA_DELIMETER);
 			switch (data[1]) {
 			case "FormulaCell":
-				_cells.put(data[0], new FormulaCell(data[2]));
+				_cells.put(data[0], new FormulaCell(this,data[2]));
 				break;
 			case "TextCell":
-				_cells.put(data[0], new TextCell(data[2]));
+				_cells.put(data[0], new TextCell(this,data[2]));
 				break;
 			case "NumberCell":
-				_cells.put(data[0], new NumberCell(data[2]));
+				_cells.put(data[0], new NumberCell(this,data[2]));
 				break;
 			case "DateCell":
 				try {
-					_cells.put(data[0], new DateCell(data[2]));
+					_cells.put(data[0], new DateCell(this,data[2]));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}

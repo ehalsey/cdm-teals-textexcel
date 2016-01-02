@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import textexcel.Sheet;
 import utils.Utils;
 
 public class DateCell extends Cell implements ICell {
@@ -13,15 +14,17 @@ public class DateCell extends Cell implements ICell {
 	 */
 	private Date _contents = BLANK_VALUE;
 	
-	public DateCell() {
+	public DateCell(Sheet sheet) {
+		super(sheet);
 	}
 
-	public DateCell(Date value) {
+	public DateCell(Sheet sheet, Date value) {
+		this(sheet);
 		_contents = value;
 	}
 
-	public DateCell(String value) throws ParseException {
-		this(DateCell.SIMPLE_DATE_FORMAT.parse(value));
+	public DateCell(Sheet sheet, String value) throws ParseException {
+		this(sheet, DateCell.SIMPLE_DATE_FORMAT.parse(value));
 	}
 
 	public String toString() {

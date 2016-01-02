@@ -162,13 +162,32 @@ public class SheetTest {
 	@Test
 	public void testCellEvalValue() {
 		Sheet sheet = new Sheet(1, 1);
-		sheet.setCell("A1", "(1+2+3+4");
+		sheet.setCell("A1", "(1 + 2 + 3 + 4");
 		assertEquals("10",sheet.getCell("A1").getValue().trim());
-		sheet.setCell("A1", "(1+2-5*4/5");
+		sheet.setCell("A1", "(1 + 2 - 5 * 4 / 5");
 		assertEquals("-1.6",sheet.getCell("A1").getValue().trim());
 		sheet.setCell("A1", "(1 + 2 - 5 * 4 / 5");
 		assertEquals("-1.6",sheet.getCell("A1").getValue().trim());
 		
+		sheet = new Sheet(5, 3);
+		sheet.setCell("A1", "1");
+		sheet.setCell("B1", "2");
+		sheet.setCell("C1", "3");
+		sheet.setCell("A2", "4");
+		sheet.setCell("B2", "5");
+		sheet.setCell("C2", "6");
+		sheet.setCell("A4", "( A1 )");
+		assertEquals("1",sheet.getCell("A4").getValue().trim());
+		sheet.setCell("B4", "( A1 + C1 / 3)");
+		assertEquals("1.333333333>",sheet.getCell("B4").getValue());
+		sheet.setCell("C4", "( A4 - B4 * -1 )");
+		assertEquals("0.333333333>",sheet.getCell("C4").getValue());
+		sheet.setCell("A5", "( sum A1 - C2 )");
+		assertEquals("21",sheet.getCell("A5").getValue().trim());
+		sheet.setCell("B5", "( avg A1 - C2 )");
+		assertEquals("3.5",sheet.getCell("B5").getValue().trim());
+		sheet.setCell("C5", "( sum A1 - C1 )");
+		assertEquals("6",sheet.getCell("C5").getValue().trim());
 	}
 
 }

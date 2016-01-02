@@ -1,5 +1,6 @@
 package textexcel.cells;
 
+import textexcel.Sheet;
 import utils.Utils;
 
 public class NumberCell extends Cell implements ICell {
@@ -9,15 +10,17 @@ public class NumberCell extends Cell implements ICell {
 	 */
 	private double _contents = BLANK_VALUE;
 	
-	public NumberCell() {
+	public NumberCell(Sheet sheet) {
+		super(sheet);
 	}
 
-	public NumberCell(Double value) {
+	public NumberCell(Sheet sheet, Double value) {
+		this(sheet);
 		_contents = value;
 	}
 
-	public NumberCell(String value) {
-		this(Double.parseDouble(value));
+	public NumberCell(Sheet sheet, String value) {
+		this(sheet,Double.parseDouble(value));
 	}
 	
 	public String toString() {

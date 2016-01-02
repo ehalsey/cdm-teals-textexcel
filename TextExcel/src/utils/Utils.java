@@ -1,9 +1,39 @@
 package utils;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Utils {
+	
+	public static ArrayList<String> breakString(String regex, String value) {
+		ArrayList<String> parts = new ArrayList<>();
+		
+		Pattern pattern = Pattern
+				.compile(regex);
+		Matcher m = pattern.matcher(value);
+		while (m.find()) {
+			parts.add(m.group());
+		}		
+		return parts;
+	}
+	
+	
+	public static String stripOuter(String value, String wrappedWith) {
+		return stripOuter(value,wrappedWith,wrappedWith);
+	}
+	public static String stripOuter(String value, String startsWith, String endsWith) {
+		if (value.startsWith(startsWith)) {
+			value = value.substring(1);
+			if (value.endsWith(endsWith)) {
+				value = value.substring(0, value.length() - 1);
+			}
+		}
+		return value;
+	}
+	
 
 	public static String stripZeroDecimal(String contents) {
 		if(contents.endsWith(".0")) {

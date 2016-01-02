@@ -2,8 +2,10 @@ package textexcel.unit_tests;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import org.junit.After;
@@ -14,11 +16,11 @@ import org.junit.Test;
 
 import textexcel.Sheet;
 import textexcel.cells.ICell;
-import textexcel.commands.SortAscendingCommand;
-import textexcel.commands.SortDescendingCommand;
+import textexcel.commands.*;
 
 public class SheetTest {
-
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -29,10 +31,12 @@ public class SheetTest {
 
 	@Before
 	public void setUp() throws Exception {
+		System.setOut(new PrintStream(outContent));
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		System.setOut(null);
 	}
 
 	@Test
@@ -159,6 +163,19 @@ public class SheetTest {
 		assertNull(sheet.getCell("A4"));
 		sheet.undo();
 		assertEquals("(1+2+3+4)", sheet.getCell("A4").toString());
+		sheet.clear("clear A1");
+		sheet.pushHistory();
+		sheet.setCell("A1","ABCD");
+		assertEquals("ABCD",sheet.getCell("A1").getValue().trim());
+		sheet.undo();
+		assertNull(sheet.getCell("A1"));
+		SetCellCommand command = new SetCellCommand();
+		command.executeCommand(sheet, null, "A1 = DEFG");
+		assertEquals("DEFG",sheet.getCell("A1").getValue().trim());
+		command.executeCommand(sheet, null, "A1 = HIJK");
+		assertEquals("HIJK",sheet.getCell("A1").getValue().trim());
+		sheet.undo();
+		assertEquals("DEFG",sheet.getCell("A1").getValue().trim());
 	}
 
 	@Test
@@ -192,8 +209,7 @@ public class SheetTest {
 		assertEquals("6",sheet.getCell("C5").getValue().trim());
 	}
 	
-	@Test
-	public void testSortAscending() {
+	private void testSortAscending() {
 		Sheet sheet = new Sheet(10, 7);
 		sheet.setCell("B3", "100");
 		sheet.setCell("C3", "2");
@@ -229,8 +245,7 @@ public class SheetTest {
 		assertEquals("0",sheet.getCell("A1").getValue().trim());
 	}	
 	
-	@Test
-	public void testSortAscendingRect() {
+	private void testSortAscendingRect() {
 		Sheet sheet = new Sheet(10, 7);
 		SortAscendingCommand command = new SortAscendingCommand();
 		sheet.setCell("B2", "7");
@@ -248,8 +263,7 @@ public class SheetTest {
 		assertEquals("23",sheet.getCell("D3").getValue().trim());
 	}
 	
-	@Test
-	public void testSortDescendingRect() {
+	private void testSortDescendingRect() {
 		Sheet sheet = new Sheet(10, 7);
 		SortDescendingCommand command = new SortDescendingCommand();
 		sheet.setCell("B2", "7");
@@ -267,8 +281,7 @@ public class SheetTest {
 		assertEquals("-2.5",sheet.getCell("D3").getValue().trim());
 	}	
 	
-	@Test
-	public void testSortDescending() {
+	private void testSortDescending() {
 		Sheet sheet = new Sheet(10, 7);
 		sheet.setCell("B3", "100");
 		sheet.setCell("C3", "2");
@@ -296,4 +309,57 @@ public class SheetTest {
 		assertEquals("5",sheet.getCell("D9").getValue().trim());
 		assertEquals("5",sheet.getCell("D10").getValue().trim());
 	}	
+	
+	@Test
+	public void testAllCommands() {
+		ClearCommand clearCommand = new ClearCommand();
+		Sheet sheet = new Sheet(10, 7);
+		populateSheet(sheet);
+		assertEquals("ABCD",sheet.getCell("A1").getValue().trim());
+		clearCommand.executeCommand(sheet, null, "clear A1");
+		assertNull(sheet.getCell("A1"));	
+		populateSheet(sheet);
+		clearCommand.executeCommand(sheet, null, "clear");
+		assertNull(sheet.getCell("A1"));	
+		assertNull(sheet.getCell("A2"));	
+		assertNull(sheet.getCell("A3"));	
+		assertNull(sheet.getCell("A4"));
+		assertEquals(0, sheet.getCellCount());
+		populateSheet(sheet);
+		SaveCommand saveCommand = new SaveCommand();
+		saveCommand.executeCommand(sheet, null, "save .\\misc\\temptest.textexcel");
+		clearCommand.executeCommand(sheet, null, "clear");
+		LoadCommand loadCommand = new LoadCommand();
+		loadCommand.executeCommand(sheet, null, "load .\\misc\\temptest.textexcel");
+		assertEquals("ABCD",sheet.getCell("A1").getValue().trim());
+		assertEquals("01/01/2016",sheet.getCell("A2").getValue().trim());
+		assertEquals("1234",sheet.getCell("A3").getValue().trim());
+		assertEquals("10",sheet.getCell("A4").getValue().trim());
+
+		sheet.setCell("A1", "\"ABCDEFGHIJKLMNO\"");
+		sheet.setCell("A2", "123456789101234");
+		sheet.setCell("A3", "(123456789101234+123456789101234)");
+		PrintCommand printCommand = new PrintCommand();
+		printCommand.executeCommand(sheet, null, "print");
+		try {
+			String fileAsString = getFileAsString("misc\\testprintcommand.txt");
+			String string = outContent.toString();
+			assertEquals(fileAsString,string);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		testSortAscending();
+		testSortDescending();
+		testSortAscendingRect();
+		testSortDescendingRect();
+		clearCommand.executeCommand(sheet, null, "clear");
+		populateSheet(sheet);
+		SetCellCommand setCellCommand = new SetCellCommand();
+		setCellCommand.executeCommand(sheet, null, "A1 = \"ABCDEFGHIJKLMNO\"");
+		assertEquals("ABCDEFGHIJK>",sheet.getCell("A1").getValue().trim());
+
+		UndoCommand undoCommand = new UndoCommand();
+		undoCommand.executeCommand(sheet, null, "undo");
+		assertEquals("ABCD",sheet.getCell("A1").getValue().trim());
+	}
 }

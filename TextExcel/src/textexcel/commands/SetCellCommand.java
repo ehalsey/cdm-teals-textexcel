@@ -18,6 +18,7 @@ public class SetCellCommand extends SheetCommand {
 	@Override
 	public String executeCommand(Sheet sheet, Scanner input, String userCommand) {
 		String[] results = userCommand.split("=");
+		sheet.pushHistory();
 		sheet.setCell(results[0].trim().toUpperCase(), results[1].trim());
 		return this.commandString;
 	}

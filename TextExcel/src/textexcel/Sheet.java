@@ -35,11 +35,11 @@ public class Sheet implements Savable {
 		_maxColumns = maxColumns;
 	}
 
-	private void pushHistory() {
+	public void pushHistory() {
 		_history.add(new HashMap<>(_cells));
 	}
 	
-	private void popHistory() {
+	public void popHistory() {
 		_cells = _history.remove(_history.size()-1);
 	}
 	
@@ -48,8 +48,6 @@ public class Sheet implements Savable {
 	}
 	
 	public void setCell(String key, ICell cell) {
-		//TODO this should be in outer call to avoid doing it for every sort op
-		pushHistory();
 		_cells.put(key, cell);
 	}
 	
@@ -61,17 +59,20 @@ public class Sheet implements Savable {
 				try {
 					Constructor c = Class.forName(cellvalueType.getCellTypeName()).getConstructor(Sheet.class);
 					cell = (ICell) c.newInstance(this);
-					//TODO why are we doing this 2x
-					pushHistory();
 					cell.setValue(value);
 				} catch (Exception e) {
 					e.printStackTrace();
 				} 
 			}
 		}
-		//TODO this should be in outer call to avoid doing it for every sort op
-		pushHistory();
-		_cells.put(key, cell);
+		if(cell != null) {
+			_cells.put(key, cell);
+		}
+		else {
+			//assume text cell if no other matches
+			_cells.put(key, new TextCell(this,value));
+		}
+			
 	}
 
 	private String getCellKey(int row, int column) {

@@ -13,7 +13,7 @@ public class ClearCommand extends SheetCommand {
 
 	@Override
 	public String executeCommand(Sheet sheet, Scanner input, String userCommand) {
-		if (sheet.getCellCount() > 0 && Utils.confirmAction(input)) {
+		if (sheet.getCellCount() > 0 && (input == null || Utils.confirmAction(input))) {
 			sheet.clear(userCommand);
 			return this.commandString;
 		}

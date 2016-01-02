@@ -31,10 +31,7 @@ public class NumberCell extends Cell implements ICell {
 	public String getValue() {
 		String contents = "" + _contents;
 		contents = Utils.stripZeroDecimal(contents);
-		if (_contents == BLANK_VALUE) {
-			return Utils.getStringWithLengthAndFilledWithCharacter(
-					Cell.MAX_LENGTH, ' ');
-		} else if (contents.length() <= Cell.MAX_LENGTH) {
+		if (contents.length() <= Cell.MAX_LENGTH) {
 			return Utils.center(contents, Cell.MAX_LENGTH);
 		} else {
 			return contents.substring(0, Cell.MAX_LENGTH - 1) + ">";

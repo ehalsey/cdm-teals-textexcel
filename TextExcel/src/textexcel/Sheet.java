@@ -47,6 +47,13 @@ public class Sheet implements Savable {
 		return _cells.get(key);
 	}
 	
+	public void setCell(String key, ICell cell) {
+		//TODO this should be in outer call to avoid doing it for every sort op
+		pushHistory();
+		_cells.put(key, cell);
+	}
+	
+	
 	public void setCell(String key, String value) {
 		ICell cell = null;
 		for (ICellValue cellvalueType : _cellValueTypes) {
@@ -54,6 +61,7 @@ public class Sheet implements Savable {
 				try {
 					Constructor c = Class.forName(cellvalueType.getCellTypeName()).getConstructor(Sheet.class);
 					cell = (ICell) c.newInstance(this);
+					//TODO why are we doing this 2x
 					pushHistory();
 					cell.setValue(value);
 				} catch (Exception e) {
@@ -61,6 +69,7 @@ public class Sheet implements Savable {
 				} 
 			}
 		}
+		//TODO this should be in outer call to avoid doing it for every sort op
 		pushHistory();
 		_cells.put(key, cell);
 	}
@@ -167,7 +176,6 @@ public class Sheet implements Savable {
 		        index++;
 		    }
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ret;

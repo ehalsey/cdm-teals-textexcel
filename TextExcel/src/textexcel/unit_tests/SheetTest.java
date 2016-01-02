@@ -15,6 +15,7 @@ import org.junit.Test;
 import textexcel.Sheet;
 import textexcel.cells.ICell;
 import textexcel.commands.SortAscendingCommand;
+import textexcel.commands.SortDescendingCommand;
 
 public class SheetTest {
 
@@ -207,6 +208,92 @@ public class SheetTest {
 		//Enter a command: sorta B3 - F3
 		SortAscendingCommand command = new SortAscendingCommand();
 		command.executeCommand(sheet, null, "sorta B3 - F3");
+		assertEquals("2",sheet.getCell("B3").getValue().trim());
+		assertEquals("2",sheet.getCell("C3").getValue().trim());
+		assertEquals("10",sheet.getCell("D3").getValue().trim());
+		assertEquals("100",sheet.getCell("E3").getValue().trim());
+		assertEquals("200",sheet.getCell("F3").getValue().trim());
+		//Enter a command: sorta D6 - D10
+		command.executeCommand(sheet, null, "sorta D6 - D10");
+		assertEquals("5",sheet.getCell("D6").getValue().trim());
+		assertEquals("5",sheet.getCell("D7").getValue().trim());
+		assertEquals("6",sheet.getCell("D8").getValue().trim());
+		assertEquals("60",sheet.getCell("D9").getValue().trim());
+		assertEquals("500",sheet.getCell("D10").getValue().trim());
 	}
 
+	@Test
+	public void testZeroCell() {
+		Sheet sheet = new Sheet(1,1);
+		sheet.setCell("A1", "0");
+		assertEquals("0",sheet.getCell("A1").getValue().trim());
+	}	
+	
+	@Test
+	public void testSortAscendingRect() {
+		Sheet sheet = new Sheet(10, 7);
+		SortAscendingCommand command = new SortAscendingCommand();
+		sheet.setCell("B2", "7");
+		sheet.setCell("C2", "23");
+		sheet.setCell("D2", "-2.5");
+		sheet.setCell("B3", "15");
+		sheet.setCell("C3", "0");
+		sheet.setCell("D3", "7");
+		command.executeCommand(sheet, null, "sorta B2 - D3");
+		assertEquals("-2.5",sheet.getCell("B2").getValue().trim());
+		assertEquals("0",sheet.getCell("C2").getValue().trim());
+		assertEquals("7",sheet.getCell("D2").getValue().trim());
+		assertEquals("7",sheet.getCell("B3").getValue().trim());
+		assertEquals("15",sheet.getCell("C3").getValue().trim());
+		assertEquals("23",sheet.getCell("D3").getValue().trim());
+	}
+	
+	@Test
+	public void testSortDescendingRect() {
+		Sheet sheet = new Sheet(10, 7);
+		SortDescendingCommand command = new SortDescendingCommand();
+		sheet.setCell("B2", "7");
+		sheet.setCell("C2", "23");
+		sheet.setCell("D2", "-2.5");
+		sheet.setCell("B3", "15");
+		sheet.setCell("C3", "0");
+		sheet.setCell("D3", "7");
+		command.executeCommand(sheet, null, "sortd B2 - D3");
+		assertEquals("23",sheet.getCell("B2").getValue().trim());
+		assertEquals("15",sheet.getCell("C2").getValue().trim());
+		assertEquals("7",sheet.getCell("D2").getValue().trim());
+		assertEquals("7",sheet.getCell("B3").getValue().trim());
+		assertEquals("0",sheet.getCell("C3").getValue().trim());
+		assertEquals("-2.5",sheet.getCell("D3").getValue().trim());
+	}	
+	
+	@Test
+	public void testSortDescending() {
+		Sheet sheet = new Sheet(10, 7);
+		sheet.setCell("B3", "100");
+		sheet.setCell("C3", "2");
+		sheet.setCell("D3", "10");
+		sheet.setCell("E3", "200");
+		sheet.setCell("F3", "2");
+		sheet.setCell("D6", "5");
+		sheet.setCell("D7", "60");
+		sheet.setCell("D8", "500");
+		sheet.setCell("D9", "6");
+		sheet.setCell("D10", "5");	
+		//Enter a command: sorta B3 - F3
+		SortDescendingCommand command = new SortDescendingCommand();
+		command.executeCommand(sheet, null, "sortd B3 - F3");
+		assertEquals("200",sheet.getCell("B3").getValue().trim());
+		assertEquals("100",sheet.getCell("C3").getValue().trim());
+		assertEquals("10",sheet.getCell("D3").getValue().trim());
+		assertEquals("2",sheet.getCell("E3").getValue().trim());
+		assertEquals("2",sheet.getCell("F3").getValue().trim());
+		//Enter a command: sorta D6 - D10
+		command.executeCommand(sheet, null, "sortd D6 - D10");
+		assertEquals("500",sheet.getCell("D6").getValue().trim());
+		assertEquals("60",sheet.getCell("D7").getValue().trim());
+		assertEquals("6",sheet.getCell("D8").getValue().trim());
+		assertEquals("5",sheet.getCell("D9").getValue().trim());
+		assertEquals("5",sheet.getCell("D10").getValue().trim());
+	}	
 }

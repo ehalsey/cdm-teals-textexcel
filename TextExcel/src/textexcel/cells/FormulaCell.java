@@ -77,9 +77,11 @@ public class FormulaCell extends Cell implements ICell {
 		return total;
 	}
 
-	private double calculateSum(ArrayList<ICell> cells) {
+	private double calculateSum(ArrayList<String> cellKeys) {
 		double total = 0.0;
-		for (ICell cell : cells) {
+		Sheet sheet = this.getSheet();
+		for (String cellKey : cellKeys) {
+			ICell cell = sheet.getCell(cellKey);
 			if(cell instanceof NumberCell) {
 				total += Double.parseDouble(((NumberCell)cell).toString());
 			}
@@ -90,8 +92,8 @@ public class FormulaCell extends Cell implements ICell {
 		return total;
 	}
 
-	private double calculateAvg(ArrayList<ICell> cells) {
-		return calculateSum(cells)/cells.size();
+	private double calculateAvg(ArrayList<String> cellKeys) {
+		return calculateSum(cellKeys)/cellKeys.size();
 	}
 	
 	@Override

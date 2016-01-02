@@ -49,7 +49,7 @@ public class Utils {
 		return contents;
 	}
 	
-	public static ArrayList<ICell> getCellsForFunction(String contents, Sheet sheet) {
+	public static ArrayList<String> getCellsForFunction(String contents, Sheet sheet) {
 		String[] parts = contents.split(" ");
 		String beginCell = parts[1];
 		String endCell = parts[3];
@@ -63,13 +63,13 @@ public class Utils {
 		char endColumn = cellKeyParts.get(0).toCharArray()[0];
 		int endRow = Integer.parseInt(cellKeyParts.get(1));
 		
-		ArrayList<ICell> cells = new ArrayList<ICell>();
+		ArrayList<String> cellKeys = new ArrayList<String>();
 		for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
 			for (char colChar = startColumn; colChar <= endColumn; colChar++) {
-				cells.add(sheet.getCell(String.valueOf(colChar)+rowIndex));
+				cellKeys.add(String.valueOf(colChar)+rowIndex);
 			}
 		}
-		return cells;
+		return cellKeys;
 	}	
 	
 	public static boolean confirmAction(Scanner input) {

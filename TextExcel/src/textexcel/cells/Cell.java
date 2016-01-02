@@ -1,7 +1,7 @@
 package textexcel.cells;
 
 import textexcel.Sheet;
-
+//TODO should implement IComparable
 public abstract class Cell {
 	public static final int MAX_LENGTH = 12;
 	private Sheet _sheet;

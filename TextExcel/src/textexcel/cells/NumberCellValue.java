@@ -14,7 +14,6 @@ public class NumberCellValue implements ICellValue {
 
 	@Override
 	public String getCellTypeName() {
-		// TODO Auto-generated method stub
 		return ICellValue.nameSpace + "NumberCell";
 	}
 

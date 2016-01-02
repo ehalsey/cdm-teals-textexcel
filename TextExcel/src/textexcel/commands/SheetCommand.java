@@ -5,7 +5,6 @@ public abstract class SheetCommand implements ISheetCommand {
 	
 	@Override
 	public boolean isMatch(String command) {
-		// TODO Auto-generated method stub
 		return command.toLowerCase().contains(this.commandString);
 	}
 

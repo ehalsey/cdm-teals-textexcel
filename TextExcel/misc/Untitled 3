@@ -1,0 +1,6 @@
+sheet.setCell("B2", "7");
+sheet.setCell("C2", "23");
+sheet.setCell("D2", "-2.5");
+sheet.setCell("B3", "15");
+sheet.setCell("C3", "0");
+sheet.setCell("D3", "7");

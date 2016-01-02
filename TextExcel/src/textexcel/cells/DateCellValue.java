@@ -16,13 +16,11 @@ public class DateCellValue implements ICellValue {
 			} catch (ParseException e) {
 			}
 		}
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String getCellTypeName() {
-		// TODO Auto-generated method stub
 		return ICellValue.nameSpace + "DateCell";
 	}
 

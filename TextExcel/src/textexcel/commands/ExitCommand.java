@@ -13,7 +13,6 @@ public class ExitCommand extends SheetCommand {
 	
 	@Override
 	public String executeCommand(Sheet sheet, Scanner input, String userCommand) {
-		// TODO Auto-generated method stub
 		return this.commandString;
 	}
 

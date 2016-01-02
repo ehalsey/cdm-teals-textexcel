@@ -100,7 +100,10 @@ public class Sheet implements Savable {
 				String cellKey = getCellKey(row, column);
 				String val = "";
 				if(_cells.containsKey(cellKey)){
-					val = ((ICell) _cells.get(cellKey)).getValue();
+					val = "" + getCellValue(cellKey);
+					if(val.length()>Cell.MAX_LENGTH) {
+						val = val.substring(0, Cell.MAX_LENGTH-1) + ">";
+					}
 				}
 				buffer.append(Utils.center(val, Cell.MAX_LENGTH) + COLUMN_SEP);
 			}
@@ -108,6 +111,24 @@ public class Sheet implements Savable {
 			buffer.append(getRowSeparator());
 		}
 		return buffer.toString();
+	}
+
+	private String getCellValue(String cellKey) {
+		String val="";
+		ICell cell = _cells.get(cellKey);
+		if(cell instanceof TextCell) {
+			val = ((TextCell)cell).getValue();
+		}
+		else if(cell instanceof FormulaCell) {
+			val = ""+((FormulaCell)cell).getValue();
+		}
+		else if(cell instanceof DateCell) {
+			val = ""+((DateCell)cell);
+		}
+		else if(cell instanceof NumberCell) {
+			val = ""+((NumberCell)cell).getValue();
+		}
+		return val;
 	}
 
 	private String getRowSeparator() {
@@ -123,7 +144,6 @@ public class Sheet implements Savable {
 	public void printCell(String key) {
 		if(_cells.containsKey(key)) 
 		{
-			//TODO need to fix so values don't contain padding & enclose with quotes
 			System.out.println(key + " = " + _cells.get(key).toString());
 		}
 		else
@@ -184,7 +204,7 @@ public class Sheet implements Savable {
 
 	@Override
 	public void loadFrom(String[] saveData) {
-		//TODO should use Program clear confirm and save if want
+
 		pushHistory();
 		_cells.clear();
 		for (int i = 0; i < saveData.length; i++) {

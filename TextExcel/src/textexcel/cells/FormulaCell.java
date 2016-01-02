@@ -2,6 +2,7 @@ package textexcel.cells;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import textexcel.Sheet;
 import utils.Utils;
 
@@ -97,23 +98,17 @@ public class FormulaCell extends Cell implements ICell {
 	}
 	
 	@Override
-	public String getValue() {
-		if (_contents.equals(BLANK_VALUE)) {
-			return Utils.getStringWithLengthAndFilledWithCharacter(
-					Cell.MAX_LENGTH, ' ');
-		} else {
-			final String valueAsString = Utils.stripZeroDecimal("" + getCalculatedValue());
-			if (valueAsString.length() <= Cell.MAX_LENGTH) {
-				return Utils.center(valueAsString, Cell.MAX_LENGTH);
-			} else {
-				return valueAsString.substring(0,
-						Cell.MAX_LENGTH - 1) + ">";
-			}
-		}
+	public Object getValue() {
+		return getCalculatedValue();
+	}
+
+	public void setValue(String value) {
+		_contents = utils.Utils.stripOuter(value, "(", ")").trim();
 	}
 
 	@Override
-	public void setValue(String value) {
-		_contents = utils.Utils.stripOuter(value, "(", ")").trim();
+	public void setValue(Object value) {
+		setValue((String)value);
+		
 	}
 }

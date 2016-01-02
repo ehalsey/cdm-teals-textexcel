@@ -23,20 +23,17 @@ public class TextCell extends Cell implements ICell {
 		return "\"" + _contents + "\"";
 	}
 
-	@Override
 	public String getValue() {
-		if (_contents.equals(BLANK_VALUE)) {
-			return Utils.getStringWithLengthAndFilledWithCharacter(
-					Cell.MAX_LENGTH, ' ');
-		} else if (_contents.length() <= Cell.MAX_LENGTH) {
-			return Utils.center(_contents, Cell.MAX_LENGTH);
-		} else {
-			return _contents.substring(0, Cell.MAX_LENGTH - 1) + ">";
-		}
+		return _contents;
+	}
+
+	public void setValue(String value) {
+		_contents=utils.Utils.stripOuter(value, "\"");
 	}
 
 	@Override
-	public void setValue(String value) {
-		_contents=utils.Utils.stripOuter(value, "\"");
+	public void setValue(Object value) {
+		setValue((String)value);
+		
 	}
 }

@@ -31,25 +31,30 @@ public class DateCell extends Cell implements ICell {
 		return "" + SIMPLE_DATE_FORMAT.format(_contents);
 	}
 
+	public Date getValue() {
+		return _contents;
+	}
+	
 	@Override
-	public String getValue() {
-		String contents = "" + SIMPLE_DATE_FORMAT.format(_contents);
-		if (_contents == BLANK_VALUE) {
-			return Utils.getStringWithLengthAndFilledWithCharacter(
-					DateCell.MAX_LENGTH, ' ');
-		} else if (contents.length() <= Cell.MAX_LENGTH) {
-			return Utils.center(contents, Cell.MAX_LENGTH);
-		} else {
-			return contents.substring(0, Cell.MAX_LENGTH - 1) + ">";
+	public void setValue(Object value) {
+		if(value instanceof String) {
+			setValue((String)value);
 		}
+		else if(value instanceof Date) {
+			setValue((Date)value);
+		}
+	};
+
+	public void setValue(Date value) {
+		_contents = value;
 	}
 
-	@Override
 	public void setValue(String value) {
 		try {
-			_contents = DateCell.SIMPLE_DATE_FORMAT.parse(value);
+			setValue(DateCell.SIMPLE_DATE_FORMAT.parse(value));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
+	
 }

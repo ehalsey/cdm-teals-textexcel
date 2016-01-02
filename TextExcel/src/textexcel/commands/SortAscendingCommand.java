@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import textexcel.Sheet;
 import textexcel.TextExcelProgram;
-import textexcel.cells.ICell;
+import textexcel.cells.*;
 import utils.Utils;
 
 public class SortAscendingCommand extends SheetCommand implements ISheetCommand {
@@ -21,7 +21,6 @@ public class SortAscendingCommand extends SheetCommand implements ISheetCommand 
 
 	@Override
 	public String executeCommand(Sheet sheet, Scanner input, String userCommand) {
-		//TODO need to check for empty cells
 		ArrayList<String> cellKeys = Utils.getCellsForFunction(userCommand, sheet);
 		int i, j, first;
 		ICell temp;
@@ -30,8 +29,15 @@ public class SortAscendingCommand extends SheetCommand implements ISheetCommand 
 			for (j = i+1; j < cellKeys.size(); j++) // locate smallest element between
 										// positions 1 and i.
 			{
-				Double firstValue = Double.parseDouble(sheet.getCell(cellKeys.get(first)).getValue());
-				Double jValue = Double.parseDouble(sheet.getCell(cellKeys.get(j)).getValue());
+				ICell firstCell = sheet.getCell(cellKeys.get(first));
+				ICell jCell = sheet.getCell(cellKeys.get(j));
+				double firstValue=0.0, jValue=0.0;
+				if(firstCell != null && firstCell instanceof FormulaCell || firstCell instanceof NumberCell) {
+					firstValue = (double)firstCell.getValue();
+				}
+				if(jCell != null && jCell instanceof FormulaCell || jCell instanceof NumberCell) {
+					jValue = (double)jCell.getValue();
+				}
 				if (jValue < firstValue)
 					first = j;
 			}

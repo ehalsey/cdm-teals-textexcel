@@ -28,18 +28,20 @@ public class NumberCell extends Cell implements ICell {
 	}
 
 	@Override
-	public String getValue() {
-		String contents = "" + _contents;
-		contents = Utils.stripZeroDecimal(contents);
-		if (contents.length() <= Cell.MAX_LENGTH) {
-			return Utils.center(contents, Cell.MAX_LENGTH);
-		} else {
-			return contents.substring(0, Cell.MAX_LENGTH - 1) + ">";
-		}
+	public Object getValue() {
+		return _contents;
+	}
+
+	public void setValue(String value) {
+		_contents = Double.parseDouble(value);
+	}
+	public void setValue(double value) {
+		_contents = value;
 	}
 
 	@Override
-	public void setValue(String value) {
-		_contents = Double.parseDouble(value);
+	public void setValue(Object value) {
+		setValue((String)value);
+		
 	}
 }
